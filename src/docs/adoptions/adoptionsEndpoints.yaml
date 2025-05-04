@@ -1,0 +1,176 @@
+paths:
+  /api/adoptions:
+    get:
+      summary: Get all adoptions
+      description: Returns a list of all adoptions in the system
+      tags:
+        - Adoptions
+      responses:
+        200:
+          description: List of adoptions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  adoptions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Adoption"
+
+    post:
+      summary: Create a new adoption
+      description: Creates a new adoption record in the system
+      tags:
+        - Adoptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - owner
+                - pet
+              properties:
+                owner:
+                  type: string
+                  format: ObjectId
+                  description: ID of the owner
+                pet:
+                  type: string
+                  format: ObjectId
+                  description: ID of the pet
+      responses:
+        201:
+          description: Adoption created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Adoption"
+        404:
+          description: Owner or pet not found, or pet already adopted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /api/adoptions/{id}:
+    get:
+      summary: Get an adoption by ID
+      description: Returns an adoption record based on its ID
+      tags:
+        - Adoptions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+          description: Adoption ID
+      responses:
+        200:
+          description: Adoption found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Adoption"
+        404:
+          description: Adoption not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete an adoption
+      description: Deletes an adoption record based on its ID
+      tags:
+        - Adoptions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+          description: Adoption ID
+      responses:
+        200:
+          description: Adoption deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        404:
+          description: Adoption not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Adoption:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Unique adoption ID
+        owner:
+          type: object
+          properties:
+            _id:
+              type: string
+              format: ObjectId
+              description: Unique owner ID
+            first_name:
+              type: string
+              description: Owner's first name
+            last_name:
+              type: string
+              description: Owner's last name
+        pet:
+          type: object
+          properties:
+            _id:
+              type: string
+              format: ObjectId
+              description: Unique pet ID
+            name:
+              type: string
+              description: Pet's name
+            specie:
+              type: string
+              description: Pet's species (e.g., Cat, Dog)
+            birthDate:
+              type: string
+              format: date
+              description: Pet's birth date
+            image:
+              type: string
+              description: URL of the pet's image

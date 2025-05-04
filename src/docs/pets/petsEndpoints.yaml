@@ -1,0 +1,204 @@
+paths:
+  /api/pets:
+    post:
+      summary: Create a new pet
+      description: Create a new pet in the system
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - specie
+                - birthDate
+                - image
+              properties:
+                name:
+                  type: string
+                  description: Pet's name
+                specie:
+                  type: string
+                  description: Pet's species (e.g., Cat, Dog)
+                birthDate:
+                  type: string
+                  format: date
+                  description: Pet's birth date
+                image:
+                  type: string
+                  description: URL of the pet's image
+      responses:
+        201:
+          description: Pet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+
+    get:
+      summary: Get all pets
+      description: Returns a list of all pets in the system
+      tags:
+        - Pets
+      responses:
+        200:
+          description: List of pets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  pets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+
+  /api/pets/{id}:
+    get:
+      summary: Get a pet by ID
+      description: Returns a pet based on its ID
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+          description: Pet ID
+      responses:
+        200:
+          description: Pet found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+    put:
+      summary: Update a pet
+      description: Updates an existing pet based on its ID
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+          description: Pet ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Pet's name
+                specie:
+                  type: string
+                  description: Pet's species (e.g., Cat, Dog)
+                birthDate:
+                  type: string
+                  format: date
+                  description: Pet's birth date
+                image:
+                  type: string
+                  description: URL of the pet's image
+      responses:
+        200:
+          description: Pet updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a pet
+      description: Deletes an existing pet based on its ID
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+          description: Pet ID
+      responses:
+        200:
+          description: Pet deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Unique pet ID
+        name:
+          type: string
+          description: Pet's name
+        specie:
+          type: string
+          description: Pet's species (e.g., Cat, Dog)
+        birthDate:
+          type: string
+          format: date
+          description: Pet's birth date
+        image:
+          type: string
+          description: URL of the pet's image

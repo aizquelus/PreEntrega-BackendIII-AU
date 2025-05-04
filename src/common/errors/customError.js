@@ -1,3 +1,5 @@
+import { logger } from "../utils/logger.js";
+
 export const customError = async (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = statusCode === 500 ? "Internal Server Error" : err.message;
@@ -11,10 +13,12 @@ export const customError = async (err, req, res, next) => {
     };
 
     if (statusCode === 500) {
-        console.log(`Status: ${statusCode} [${req.method}] ${req.originalUrl} - msg: ${err.message}`);
+        logger.error(`Status: ${statusCode} [${req.method}] ${req.originalUrl} - msg: ${err.message}`);
+        logger.error(JSON.stringify(error, null, 2));
+
         return res.status(statusCode).json({ statusCode, message });
     }
 
-    console.log(error);
+    logger.debug(JSON.stringify(error, null, 2));
     res.status(statusCode).json({ statusCode, message });
 };

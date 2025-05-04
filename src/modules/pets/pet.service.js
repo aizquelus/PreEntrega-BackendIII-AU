@@ -19,6 +19,9 @@ class PetService {
     }
 
     async update(id, data) {
+        const pet = await petDao.getOne({ _id: id });
+        if(!pet) throw new NotFoundError("Pet not found!");
+
         return await petDao.update(id, data);
     }
 
@@ -27,6 +30,9 @@ class PetService {
     }
 
     async deleteOne(id) {
+        const pet = await petDao.getOne({ _id: id });
+        if(!pet) throw new NotFoundError("Pet not found!");
+
         return await petDao.deleteOne(id);
     }
 }

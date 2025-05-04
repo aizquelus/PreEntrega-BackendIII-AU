@@ -6,18 +6,29 @@ class MocksController {
 
     async generateData(req = request, res = response, next) {
         try {
-            let { users, pets } = req.query;
+            const { users, pets } = req.query;
 
-            if (!users && !pets) throw new BadRequestError("You must provide at least one of the following query parameters: users or pets.");
+            if (!users && !pets) {
+                throw new BadRequestError("You must provide at least one of the following query parameters: users or pets.");
+            }
 
-            users = Number(users) || 0;
-            pets = Number(pets) || 0;
-            if (users < 0 || pets < 0) throw new BadRequestError("The amount of users and pets must be a positive number.");
+            const usersCount = users ? Math.max(Number(users), 0) : null;
+            const petsCount = pets ? Math.max(Number(pets), 0) : null;
 
-            const generatedUsers = await mocksService.createUsersMocks(users);
-            const generatedPets = await mocksService.createPetsMocks(pets);
+            if ((usersCount !== null && usersCount < 0) || (petsCount !== null && petsCount < 0)) {
+                throw new BadRequestError("The amount of users and pets must be a positive number.");
+            }
 
-            res.status(201).json({ status: "success", users: generatedUsers, pets: generatedPets });
+            const [generatedUsers, generatedPets] = await Promise.all([
+                usersCount ? mocksService.createUsersMocks(usersCount) : null,
+                petsCount ? mocksService.createPetsMocks(petsCount) : null,
+            ]);
+
+            res.status(201).json({
+                status: "success",
+                ...(generatedUsers && { users: generatedUsers }),
+                ...(generatedPets && { pets: generatedPets }),
+            });
         } catch (error) {
             next(error);
         }

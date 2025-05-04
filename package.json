@@ -4,8 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch --env-file=.env ./src/app.js"
+    "test": "mocha test/**/*.test.js",
+    "test:watch": "node --watch ./node_modules/mocha/bin/mocha.js test/**/*.test.js",
+    "dev": "node --watch --env-file=.env ./src/app.js",
+    "debug": "node --watch --env-file=.env ./src/app.js",
+    "prod": "node --watch --env-file=.env.production ./src/app.js",
+    "start": "node ./src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +20,16 @@
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.1"
+    "mongoose": "^8.13.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.6.0"
+    "@faker-js/faker": "^9.6.0",
+    "chai": "^5.2.0",
+    "mocha": "^11.2.2",
+    "supertest": "^7.1.0"
   }
 }

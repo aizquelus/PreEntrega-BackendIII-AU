@@ -6,7 +6,9 @@ import UserDTO from "./user.dto.js";
 class UserService {
 
     async create(data) {
-        return await userDao.create(data);
+        const user = await userDao.create(data);
+
+        return mapToDTO(user, UserDTO);
     }
 
     async getAll() {

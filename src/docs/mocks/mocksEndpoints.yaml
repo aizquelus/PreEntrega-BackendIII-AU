@@ -1,0 +1,146 @@
+paths:
+  /api/mocks/generateData:
+    post:
+      summary: Generate mock data
+      description: Generates mock users and/or pets based on the provided query parameters.
+      tags:
+        - Mocks
+      parameters:
+        - name: users
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Number of mock users to generate.
+        - name: pets
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Number of mock pets to generate.
+      responses:
+        201:
+          description: Mock data generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+                  pets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+        400:
+          description: Bad request (e.g., invalid query parameters)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /api/mocks/mockingUsers:
+    get:
+      summary: Get mock users
+      description: Returns a list of mock users based on the specified amount.
+      tags:
+        - Mocks
+      parameters:
+        - name: amount
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Number of mock users to retrieve.
+      responses:
+        201:
+          description: Mock users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+
+  /api/mocks/mockingPets:
+    get:
+      summary: Get mock pets
+      description: Returns a list of mock pets based on the specified amount.
+      tags:
+        - Mocks
+      parameters:
+        - name: amount
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Number of mock pets to retrieve.
+      responses:
+        201:
+          description: Mock pets retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  pets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Unique user ID
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+        email:
+          type: string
+          format: email
+          description: User's email address
+
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Unique pet ID
+        name:
+          type: string
+          description: Pet's name
+        specie:
+          type: string
+          description: Pet's species (e.g., Cat, Dog)
+        birthDate:
+          type: string
+          format: date
+          description: Pet's birth date
+        image:
+          type: string
+          description: URL of the pet's image

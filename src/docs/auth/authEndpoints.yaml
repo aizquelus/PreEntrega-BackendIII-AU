@@ -1,0 +1,137 @@
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      description: Creates a new user account in the system
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+                - email
+                - password
+              properties:
+                first_name:
+                  type: string
+                  description: User's first name
+                last_name:
+                  type: string
+                  description: User's last name
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    format: ObjectId
+                    description: Unique user ID
+                  first_name:
+                    type: string
+                    description: User's first name
+                  last_name:
+                    type: string
+                    description: User's last name
+                  email:
+                    type: string
+                    format: email
+                    description: User's email address
+
+  /api/auth/login:
+    post:
+      summary: Log in a user
+      description: Authenticates a user and returns a token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        200:
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for authentication
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        format: ObjectId
+                        description: Unique user ID
+                      first_name:
+                        type: string
+                        description: User's first name
+                      last_name:
+                        type: string
+                        description: User's last name
+                      email:
+                        type: string
+                        format: email
+                        description: User's email address
+        401:
+          description: Unauthorized - Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Unique user ID
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+        email:
+          type: string
+          format: email
+          description: User's email address
