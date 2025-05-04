@@ -12,4 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
+app.use(customError);
+
 app.listen(envsConfig.PORT, () => console.log(`Server running on port ${envsConfig.PORT}`));

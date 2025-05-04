@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../common/errors/errors.js";
 import { userModel } from "./user.model.js";
 
 class UserDao {
@@ -13,7 +14,7 @@ class UserDao {
     async getOne(query) {
         const user = await userModel.findOne(query).populate("pets");
 
-        if(!user) throw new Error('User not found.');
+        if(!user) throw new NotFoundError("User not found!");
 
         return user;
     }

@@ -14,17 +14,6 @@ class PetController {
         }
     }
 
-    async createPetsMocks(req = request, res = response, next) {
-        try {
-            const { amount } = req.params;
-            const pets = await petService.createPetsMocks(amount);
-
-            res.status(201).json({ status: "success", pets });
-        } catch (error) {
-            next(error);
-        }
-    }
-
     async getAll(req = request, res = response, next) {
         try {
             const pets = await petService.getAll();
@@ -46,16 +35,6 @@ class PetController {
         }
     }
 
-    async getPetsMocks(req = request, res = response, next) {
-        try {
-            const { amount } = req.params;
-            const pets = await petService.getPetsMocks(amount);
-
-            res.status(201).json({ status: "success", pets });
-        } catch (error) {
-            next(error);
-        }
-    }
 }
 
 export const petController = new PetController();
